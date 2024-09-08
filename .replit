@@ -1,0 +1,46 @@
+modules = ["python-3.11"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Run LLM Inference CLI"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Run LLM Inference CLI with Chat-UI"
+
+[[workflows.workflow]]
+name = "Run LLM Inference CLI"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python main.py --interactive --max_length 40000 --temperature 0.7"
+
+[[workflows.workflow]]
+name = "Run LLM Inference CLI with Chat-UI"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python main.py --chat-ui"
+waitForPort = 7860
+
+[deployment]
+run = ["sh", "-c", "python main.py --interactive --max_length 40000 --temperature 0.7"]
